@@ -50,56 +50,6 @@ def get_e_squared_range(xs, ys):
     e_squared_region = xs[mask]
     return e_squared_region[0], e_squared_region[-1]
 
-def plot_results(dataframe, title):# {{{
-    xs = dataframe.index.values * 1E-3
-    ys = dataframe[dataframe.columns[0]]
-    sigmas = dataframe[dataframe.columns[1]]
-
-    fit_ys, coeffs = get_fit(xs, ys)
-    lower_bound, upper_bound = get_e_squared_range(xs, fit_ys)
-    waist_size = upper_bound - lower_bound
-
-    fig, ax = plt.subplots(1)
-    ax.set_title(title)
-    ax.set_xlabel("Pinhole Position, x, [mm]")
-    ax.set_ylabel("Measured Power [uW]")
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="<->"))
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="|-|"))
-    bbox=dict(fc="white", ec="none")
-    ax.text(lower_bound+waist_size/2, 0.05, f"Spot Size: \n{waist_size}mm", ha="center", va="center", bbox=bbox)
-
-    line_lb = ax.vlines(lower_bound, 0 , max(ys), linestyle="dotted",color='k')
-    line_ub = ax.vlines(upper_bound, 0, max(ys), linestyle="dotted",color='k')
-    line_data = ax.errorbar(xs, ys, yerr=sigmas/2, xerr=[5E-3 for x in xs], marker='x', linestyle='', c="blue")
-    line_model = ax.plot(xs, fit_ys, linestyle='--', c="red")
-
-    return line_model, line_data# }}}
-
-def plot_beam_profile(data, title):
-    xs = data["Displacement (um)"] * 1E-3 # um -> mm
-    ys = normalise(data["Power (W)"])
-
-    fit_ys, coeffs = get_fit(xs, ys)
-    lower_bound, upper_bound = get_e_squared_range(xs, fit_ys)
-    waist_size = upper_bound - lower_bound
-
-    fig, ax = plt.subplots(1)
-    ax.set_title(title)
-    ax.set_xlabel("Pinhole Position, x, [mm]")
-    ax.set_ylabel("Normalised Power")
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="<->"))
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="|-|"))
-    bbox=dict(fc="white", ec="none")
-    ax.text(lower_bound+waist_size/2, 0.05, f"Spot Size: \n{waist_size}mm", ha="center", va="center", bbox=bbox)
-
-    line_lb = ax.vlines(lower_bound, 0 ,1, linestyle="dotted",color='k')
-    line_ub = ax.vlines(upper_bound, 0, 1, linestyle="dotted",color='k')
-    line_data = ax.plot(xs, ys, marker='.', linestyle='', c="blue")
-    line_model = ax.plot(xs, fit_ys, linestyle='--', c="red", linewidth=2)
-
-    return line_model, line_data
-
-
 def beam_radius(z, w0):
 
     zR = (np.pi * w0**2)/1550E-3

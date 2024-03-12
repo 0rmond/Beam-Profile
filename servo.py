@@ -43,28 +43,3 @@ def convert_time_to_displacement(data, well_defined_data, um_per_second ):
 
     data["Displacement (um)"] = ds
     return data
-
-def ask_for_defined_points():# {{{
-    asking_for_points = True
-    while asking_for_points:
-        x0 = float(input("Please enter your first position (in micrometres): "))
-        p0 = float(input("\t and it's corresponding power (in micro-Watts): "))
-        p0_err = float(input("\t and that power's corresponding standard deviation (in Watts)"))
-        print()
-
-        x1 = float(input("Please enter your second position (in micrometres): "))
-        p1 = float(input("\t and it's corresponding power (in micro-Watts): "))
-        p1_err = float(input("\t and that power's corresponding standard deviation (in Watts)"))
-
-        print("Thank you!")
-        print(f"Your first set of values: \n \t {x0} \n\t {p0} \n\t {p0_err}")
-        print()
-        print(f"Your second set of values: \n \t {x1} \n\t {p1} \n\t {p1_err}")
-
-        asking_for_confirmation = True
-        while asking_for_confirmation:
-            is_ok = input("Is this OK? (y/n)")
-            if is_ok == 'y' or is_ok == 'Y' or is_ok == '': asking_for_points = asking_for_confirmation = False
-            elif is_ok == 'n' or is_ok == 'N': asking_for_confirmation = False; asking_for_points = True
-            else: print("Please enter y or n")
-    return [x0, x1], [p0, p1], [p0_err, p1_err]# }}}
