@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 import analyse
 
@@ -31,6 +32,17 @@ def plot_beam_profile(data, title):
 
     return line_model, line_data
 
+def plot_parametric(zs, ws):
+    coeffs, _ = analyse.curve_fit(analyse.beam_radius, zs, ws)
+    fit_zs = np.linspace(0, 1, 100)
+    fit_ws =  analyse.beam_radius(fit_zs, coeffs[0])
+    print("w0 is:", coeffs)
+
+    fig, ax = plt.subplots(1)
+    ax.plot(fit_zs, fit_ws)
+    ax.plot(zs, ws, marker='x', color='red', linestyle='')
+    plt.show()
+
 def plot_results(dataframe, title):# {{{
     """Legacy plotting function that I cannot be bothered to get rid of. Used in the Manual-Beam-Profile notebook
     """
@@ -57,3 +69,4 @@ def plot_results(dataframe, title):# {{{
     line_model = ax.plot(xs, fit_ys, linestyle='--', c="red")
 
     return line_model, line_data# }}}
+

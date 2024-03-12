@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-def get_data(path_to_dir, fname, delim):
+def get_data(path_to_dir, fname):
     data = pd.read_csv(path_to_dir+fname, delimiter=',',index_col=0)
     return data
 
@@ -52,16 +52,7 @@ def get_e_squared_range(xs, ys):
 
 def beam_radius(z, w0):
 
-    zR = (np.pi * w0**2)/1550E-3
-    w = w0*np.sqrt(1 + (z/zR)**2)
+    zR = (np.pi * (w0**2))/1550E-9
+    w = w0*np.sqrt(1 + ((z/zR)**2))
     return w
 
-def plot_parametric(zs, ws):
-    coeffs, _ = curve_fit(beam_radius, zs, ws)
-    fit_zs = np.linspace(0, zs[-1] + 100E-3, 100)
-    fit_ws =  beam_radius(fit_zs, coeffs[0])
-    print("w0 is:", coeffs)
-
-    fig, ax = plt.subplots(1)
-    ax.plot(fit_zs, fit_ws)
-    plt.show()
