@@ -57,7 +57,13 @@ while True:
     first_led_off = not LEDS[0].value
     last_led_off = not LEDS[12].value
 
-    if btn1_pressed:
+    set_turn_rate(turn_rate)
+
+    if btn1_pressed and btn2_pressed:
+        set_turn_rate(0)
+        time.sleep(2) # delayed release
+
+    elif btn1_pressed:
         if last_led_off:
             simpleio.tone(PIEZO_SPEAKER, 800, 0.05)
             turn_rate+=0.01
@@ -79,6 +85,5 @@ while True:
             simpleio.tone(PIEZO_SPEAKER, 500, 0.05)
             simpleio.tone(PIEZO_SPEAKER, 250, 0.05)
 
-    set_turn_rate(turn_rate)
-    time.sleep(0.3)
+    time.sleep(0.2)
 
