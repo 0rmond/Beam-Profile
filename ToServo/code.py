@@ -4,6 +4,7 @@ import digitalio
 from adafruit_motor import servo, motor
 import time
 import simpleio
+import speed as sp
 
 def set_pins_as_digital_output(pin):
     digout = digitalio.DigitalInOut(pin)
@@ -12,6 +13,14 @@ def set_pins_as_digital_output(pin):
 
 def set_turn_rate(new_turn_rate):
     my_servo.throttle = new_turn_rate
+
+def pause_servo():
+    set_turn_rate(0)
+    time.sleep(2) # delayed release
+
+def track_time(div):
+    ts = sp.track_time(div)
+    sp.get_speed(div, ts)
 
 
 # INITIALISE LEDS #
@@ -60,8 +69,9 @@ while True:
     set_turn_rate(turn_rate)
 
     if btn1_pressed and btn2_pressed:
-        set_turn_rate(0)
-        time.sleep(2) # delayed release
+        simpleio.tone(PIEZO_SPEAKER, 900, 0.1)
+        #pause_servo()
+        track_time(200)
 
     elif btn1_pressed:
         if last_led_off:
