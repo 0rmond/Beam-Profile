@@ -71,7 +71,7 @@ while True:
     if btn1_pressed and btn2_pressed:
         simpleio.tone(PIEZO_SPEAKER, 900, 0.1)
         #pause_servo()
-        track_time(200)
+        track_time(50)
 
     elif btn1_pressed:
         if last_led_off:
