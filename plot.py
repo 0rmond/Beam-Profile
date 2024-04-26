@@ -3,15 +3,13 @@ import numpy as np
 
 import analyse
 
-def draw_dimension_lines(ax, bounds, waist):
-    lower_bound, upper_bound = bounds
-    waist_val = waist["value"]
-    waist_err = waist["err"]
+def draw_dimension_lines(axis, upper_bound, lower_bound):
+    waist = upper_bound-lower_bound
 
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="<->"))
-    ax.annotate('', xy=(lower_bound,0.05), xytext=(upper_bound, 0.05), arrowprops=dict(arrowstyle="|-|"))
+    axis.annotate('', xy=(lower_bound,0), xytext=(upper_bound, 0), arrowprops=dict(arrowstyle="<->"))
+    axis.annotate('', xy=(lower_bound,0), xytext=(upper_bound, 0), arrowprops=dict(arrowstyle="|-|"))
     bbox=dict(fc="white", ec="none")
-    ax.text(lower_bound+waist_val/2, 0.05, f"Spot Size: \n{waist_val} +/- {waist_err}mm", ha="center", va="center", bbox=bbox)
+    axis.text(lower_bound + waist/2, 0, f"{round(waist, 3)}mm", ha="center", va="center", bbox=bbox)
 
 def plot_beam_profile(data, title):
     xs = data["Displacement (m)"] * 1E3 # um -> mm
@@ -49,7 +47,7 @@ def plot_parametric(zs, ws):
     fig, ax = plt.subplots(1)
     ax.plot(zs, fit_ws, color = "blue", linestyle="--")
     ax.plot(zs, ws, marker='x', color='red', linestyle='')
-    ax.plot(fake_zs, list(map(lambda z: analyse.beam_radius(z, (2.27E-3) / 2), fake_zs)), color="black", linestyle = "--")
+    #ax.plot(fake_zs, list(map(lambda z: analyse.beam_radius(z, (2.27E-3) / 2), fake_zs)), color="black", linestyle = "--")
     ax.set_xlabel("Position on the Table (mm)")
     ax.set_ylabel("Beam Radius (mm)")
 
